@@ -10,7 +10,7 @@ AOrbitingPlatform::AOrbitingPlatform()
 	PrimaryActorTick.bCanEverTick = true;
 
 	RootComponent = CreateDefaultSubobject<USceneComponent>("RootComponent");
-	PlatformMesh = CreateDefaultSubobject<UStaticMeshComponent>("PlatformMesh");
+	PlatformMesh = CreateDefaultSubobject<UStaticMeshComponent>("Platform Mesh");
 	PlatformMesh-> SetupAttachment(RootComponent);
 	
 	OrbitSpeed = 90.0f;
