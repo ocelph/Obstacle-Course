@@ -40,6 +40,7 @@ void ARotatingPlatform::Tick(float DeltaTime)
 	}
 	
 	//  FRotator, Rotation, uses our current rotation to spin around the Yaw (the up axis). This spins it in place. 
+	// Note: Right now the platform will rotate around it's edge but you can change the x and y value of the mesh component in the BP so that it rotate around its centre 
 	FRotator Rotation = FRotator(0, CurrentRotation, 0);
 	SetActorRotation(Rotation);
 }
