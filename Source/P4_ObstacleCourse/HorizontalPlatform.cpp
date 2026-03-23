@@ -22,9 +22,10 @@ AHorizontalPlatform::AHorizontalPlatform()
 // Called when the game starts or when spawned
 void AHorizontalPlatform::BeginPlay()
 {
-	//  we need to setup the location variables in BeginPlay to ensure that we already have a position in the world
 	Super::BeginPlay();
 	
+	
+	//  we need to setup the location variables in BeginPlay to ensure that we already have a position in the world
 	PreviousStartLocation = GetActorLocation();
 	CurrentGoalLocation = GetActorLocation() + FVector(MovementDistance,0,0);
 	//  hard-coded the distance to be on the X-Axis. This is the world forward direction
@@ -47,7 +48,7 @@ void AHorizontalPlatform::Tick(float DeltaTime)
 	
 	// check if we are “close enough” to our goal location. If we are then we snap to it, and reset our goal and starting location
 	// FVector::Distance(CurrentGoalLocation, NewLocation) gives the distance between the 2 parameters
-	if (FVector::Distance(CurrentGoalLocation,NewLocation) < ToleranceThreshold)
+	if (FVector::Distance(CurrentGoalLocation,NewLocation) <= ToleranceThreshold)
 	{
 		NewLocation = CurrentGoalLocation;
 		CurrentGoalLocation = PreviousStartLocation;
