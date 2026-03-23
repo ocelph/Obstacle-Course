@@ -18,6 +18,42 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	
+	UPROPERTY(Editanywhere)
+	UStaticMeshComponent* PlatformMesh;
+	
+	UPROPERTY()
+	FVector CentreLocation;
+	
+	// FOR MOVING POINT
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float MovementSpeed;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float ToleranceThreshold;
+	
+	//  n number of waypoints to move between
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FVector> Waypoints;
+	
+	// a variable to indicate the current index of the waypoint array we are up to
+	int32 GoalIndex;
+	
+	UPROPERTY()
+	FVector StartLocation;
+	
+	// FOR OBITTING MOVEMENT
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float OrbitSpeed;
+	
+	// distance from the location which our platform will orbit from
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float OrbitDistance;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float CurrentOrbitAngle;
+	
+	
 
 public:	
 	// Called every frame
