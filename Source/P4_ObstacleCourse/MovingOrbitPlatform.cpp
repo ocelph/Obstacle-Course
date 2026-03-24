@@ -31,14 +31,17 @@ void AMovingOrbitPlatform::BeginPlay()
 	Waypoints.Add(StartLocation);
 	CentreLocation = StartLocation;
 	
+	UE_LOG(LogTemp, Warning, TEXT("Waypoints #: %d"), Waypoints.Num());
 }
 
 // Called every frame
 void AMovingOrbitPlatform::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	UE_LOG(LogTemp, Warning, TEXT("GoalIndex: %d"), GoalIndex);
 	
-	if (Waypoints.Num() <= 1)
+	// FOR MOVING POINT
+	if (Waypoints.Num() == 1)
 		return;
 	
 	if (GoalIndex >= Waypoints.Num())
@@ -46,14 +49,19 @@ void AMovingOrbitPlatform::Tick(float DeltaTime)
 		GoalIndex = 0;
 	}
 		
-	// FOR MOVING POINT
-	FVector Direction = Waypoints[GoalIndex] - CentreLocation;
-	
+	FVector Direction = Waypoints[GoalIndex] - GetActorLocation();
 	// we normalise sth to remove the length. doing this will allow us to have consistent speed
 	Direction.Normalize();
 	
 	Direction = Direction * MovementSpeed * DeltaTime;
-	CentreLocation = CentreLocation + Direction;
+	FVector NewLocation = GetActorLocation() + Direction;
+	
+	FVector CentreDirection = Waypoints[GoalIndex] - CentreLocation;
+	CentreDirection.Normalize();
+
+	CentreDirection *= MovementSpeed * DeltaTime;
+	CentreLocation += CentreDirection;
+	
 	
 	if (FVector::Distance(Waypoints[GoalIndex], CentreLocation) <= ToleranceThreshold)
 	{
@@ -71,10 +79,9 @@ void AMovingOrbitPlatform::Tick(float DeltaTime)
 	
 	float Radians = FMath::DegreesToRadians(CurrentOrbitAngle);
 	
-	float x = CentreLocation.X + OrbitDistance * FMath::Cos(Radians);
-	float y = CentreLocation.Y + OrbitDistance * FMath::Sin(Radians);
+	float x = NewLocation.X + OrbitDistance * FMath::Cos(Radians);
+	float y = NewLocation.Y + OrbitDistance * FMath::Sin(Radians);
 
-	SetActorLocation(FVector(x,y, CentreLocation.Z));
-
+	SetActorLocation(FVector(x,y, NewLocation.Z));
 }
 
