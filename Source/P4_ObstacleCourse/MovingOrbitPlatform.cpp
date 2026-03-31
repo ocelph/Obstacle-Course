@@ -17,8 +17,6 @@ AMovingOrbitPlatform::AMovingOrbitPlatform()
 	OrbitDistance = 750.0f;
 	CurrentOrbitAngle = 0.0f;
 	
-	MovementSpeed = 100.0f;
-	ToleranceThreshold = MovementSpeed/10;
 }
 
 // Called when the game starts or when spawned

@@ -28,14 +28,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Orbit")
 	AActor* TargetActor;
 	
-	
-	// FOR MOVING POINT
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float MovementSpeed;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float ToleranceThreshold;
-	
 	// FOR OBITTING MOVEMENT
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Orbit")
 	float OrbitSpeed;
