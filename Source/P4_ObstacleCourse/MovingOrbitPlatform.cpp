@@ -14,7 +14,7 @@ AMovingOrbitPlatform::AMovingOrbitPlatform()
 	PlatformMesh->SetupAttachment(RootComponent);
 	
 	OrbitSpeed = 90.0f;
-	OrbitDistance = 4.0f;
+	OrbitDistance = 750.0f;
 	CurrentOrbitAngle = 0.0f;
 	
 	MovementSpeed = 100.0f;
@@ -61,14 +61,7 @@ void AMovingOrbitPlatform::Tick(float DeltaTime)
 	float x = CentreLocation.X + OrbitDistance * FMath::Cos(Radians);
 	float y = CentreLocation.Y + OrbitDistance * FMath::Sin(Radians);
 	
-	
-	
 	SetActorLocation(FVector(x,y, CentreLocation.Z));
 	FVector NewLocation = GetActorLocation();
-	
-	UE_LOG(LogTemp, Warning, TEXT("Centre: %s | NewLocation: %s"),
-		*CentreLocation.ToString(),
-		*NewLocation.ToString()
-	);
 }
 
