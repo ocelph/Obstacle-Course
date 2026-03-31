@@ -38,6 +38,7 @@ protected:
 	UPROPERTY()
 	FVector CurentStartLocation;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool isInReverse;
 	
 public:	

@@ -19,7 +19,6 @@ AMovingOrbitPlatform::AMovingOrbitPlatform()
 	
 	MovementSpeed = 100.0f;
 	ToleranceThreshold = MovementSpeed/10;
-	GoalIndex = 0;
 }
 
 // Called when the game starts or when spawned
@@ -27,9 +26,7 @@ void AMovingOrbitPlatform::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	StartLocation = GetActorLocation();
-	Waypoints.Add(StartLocation);
-	CentreLocation = StartLocation;
+	CentreLocation = TargetActor->GetActorLocation();
 	
 }
 
@@ -38,44 +35,18 @@ void AMovingOrbitPlatform::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-	// FOR MOVING POINT
-	if (Waypoints.Num() == 1)
+	// If no target actor is set then the platform does not orbit
+	
+	if (!TargetActor)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("OrbitPlatform: TargetActor is NULL!"));
 		return;
-	
-	if (GoalIndex >= Waypoints.Num())
+	} else
 	{
-		GoalIndex = 0;
+		UE_LOG(LogTemp, Warning, TEXT("OrbitPlatform: TargetActor is %s"), *TargetActor->GetName());
 	}
-		
-	FVector Direction = Waypoints[GoalIndex] - GetActorLocation();
-	// we normalise sth to remove the length. doing this will allow us to have consistent speed
-	Direction.Normalize();
 	
-	Direction = Direction * MovementSpeed * DeltaTime;
-	FVector NewLocation = GetActorLocation() + Direction;
-	
-	FVector CentreDirection = Waypoints[GoalIndex] - CentreLocation;
-	CentreDirection.Normalize();
-
-	CentreDirection *= MovementSpeed * DeltaTime;
-	CentreLocation += CentreDirection;
-	
-	// Fix 1: Just going from initial posi to next waypoint
-	// if (FVector::Distance(Waypoints[GoalIndex], NewLocation) <= ToleranceThreshold)
-	// {
-	// 	NewLocation = Waypoints[GoalIndex];
-	// 	GoalIndex++;
-	// }
-	//
-	// Question: Is it not working because of the 4.0 orbit distance?
-	
-	
-	
-	if (FVector::Distance(Waypoints[GoalIndex], CentreLocation) <= ToleranceThreshold)
-	{
-		CentreLocation = Waypoints[GoalIndex];
-		GoalIndex++;
-	}
+	CentreLocation = TargetActor->GetActorLocation();
 	
 	// FOR ORBITTING MOVEMENT
 	CurrentOrbitAngle = CurrentOrbitAngle + (DeltaTime * OrbitSpeed);
@@ -87,16 +58,17 @@ void AMovingOrbitPlatform::Tick(float DeltaTime)
 	
 	float Radians = FMath::DegreesToRadians(CurrentOrbitAngle);
 	
-	float x = NewLocation.X + OrbitDistance * FMath::Cos(Radians);
-	float y = NewLocation.Y + OrbitDistance * FMath::Sin(Radians);
+	float x = CentreLocation.X + OrbitDistance * FMath::Cos(Radians);
+	float y = CentreLocation.Y + OrbitDistance * FMath::Sin(Radians);
 	
 	
-	// Fix 2: Not orbitting, Just moving up and down
-	// float x = CentreLocation.X + OrbitDistance * FMath::Cos(Radians);
-	// float y = CentreLocation.Y + OrbitDistance * FMath::Sin(Radians);
-	//
-	// Question: I didn't understand why it is not orbiting when i do this
-
-	SetActorLocation(FVector(x,y, NewLocation.Z));
+	
+	SetActorLocation(FVector(x,y, CentreLocation.Z));
+	FVector NewLocation = GetActorLocation();
+	
+	UE_LOG(LogTemp, Warning, TEXT("Centre: %s | NewLocation: %s"),
+		*CentreLocation.ToString(),
+		*NewLocation.ToString()
+	);
 }
 
